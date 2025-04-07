@@ -2,7 +2,7 @@
 Custom integration to integrate evmate with Home Assistant.
 
 For more details about this integration, please refer to
-https://github.com/ludeeus/evmate
+https://github.com/rpliva/evmate
 """
 
 from __future__ import annotations

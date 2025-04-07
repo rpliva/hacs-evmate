@@ -68,10 +68,13 @@ class EVMateFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                             type=selector.TextSelectorType.TEXT,
                         ),
                     ),
-                    vol.Required(CONF_PORT, default=8000): selector.TextSelector(
-                        selector.TextSelectorConfig(
-                            type=selector.TextSelectorType.NUMBER,
-                        ),
+                    vol.Required(CONF_PORT, default=8000): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            min=1,
+                            max=65535,
+                            step=1,
+                            mode=selector.NumberSelectorMode.BOX,
+                        )
                     ),
                 },
             ),

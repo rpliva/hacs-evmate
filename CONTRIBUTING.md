@@ -50,7 +50,7 @@ Use [black](https://github.com/ambv/black) to make sure the code follows the sty
 
 ## Test your code modification
 
-This custom component is based on [evmate template](https://github.com/ludeeus/evmate).
+This custom component is based on [evmate template](https://github.com/rpliva/evmate).
 
 It comes with development environment in a container, easy to launch
 if you use Visual Studio Code. With this container you will have a stand alone
