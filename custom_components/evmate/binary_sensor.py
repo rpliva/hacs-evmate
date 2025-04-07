@@ -27,8 +27,9 @@ async def async_setup_entry(
     """Set up the binary_sensor platform."""
     async_add_entities(
         EVMateBinarySensor(
-            entry.unique_id + "-" +
-                entity_description.key.replace(",", "_").replace(" ", "_"),
+            entry.unique_id
+            + "-"
+            + entity_description.key.replace(",", "_").replace(" ", "_"),
             coordinator=entry.runtime_data.coordinator,
             entity_description=entity_description,
         )

@@ -1,4 +1,5 @@
 """Tests for sensor."""
+
 import json
 from pathlib import Path
 from unittest.mock import AsyncMock
@@ -14,6 +15,7 @@ from custom_components.evmate.sensor import EVMateSensor
 async def test_voltage_l1_sensor() -> None:
     """Test the sensor for Voltage L1 with data from the update_setting.json fixture."""
     await _check_sensor_value("U1", 235)
+
 
 @pytest.mark.asyncio
 async def test_voltage_l2_sensor() -> None:

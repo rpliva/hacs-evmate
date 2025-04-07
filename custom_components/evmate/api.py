@@ -26,6 +26,7 @@ class IntegrationEvmateApiClientAuthenticationError(
 ):
     """Exception to indicate an authentication error."""
 
+
 class IntegrationEvmateApiClient:
     """EVMate API Client."""
 
@@ -40,7 +41,6 @@ class IntegrationEvmateApiClient:
         self._session = async_get_clientsession(self._hass)
         self._host = "http://" + address + ":" + str(port) + "/"
 
-
     async def async_get_data(self) -> dict[str, Any]:
         """Get data from the API."""
         result = {}
@@ -49,7 +49,6 @@ class IntegrationEvmateApiClient:
         result.update(await self._endpoint_request("updateEvse"))
         return result
 
-
     async def _endpoint_request(self, endpoint: str) -> dict[str, Any]:
         try:
             response = await self._session.get(self._host + endpoint)
@@ -57,6 +56,6 @@ class IntegrationEvmateApiClient:
             payload = await response.text()
             raw_json = json.loads(payload)
         except Exception as e:  # noqa: BLE001
-            raw_json = { "error": e }
+            raw_json = {"error": e}
 
         return raw_json

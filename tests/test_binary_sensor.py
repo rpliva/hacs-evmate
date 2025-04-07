@@ -1,4 +1,5 @@
 """Tests for Binary sensors."""
+
 import json
 from pathlib import Path
 from unittest.mock import AsyncMock
@@ -14,6 +15,7 @@ from custom_components.evmate.coordinator import EVMateDataUpdateCoordinator
 async def test_automatic_update_sensor() -> None:
     """Test the automatic update with data from the update_setting.json fixture."""
     await _check_binary_sensor_value("Automatic update", "sw,AUTOMATIC UPDATE", "on")
+
 
 @pytest.mark.asyncio
 async def test_enable_charging_sensor() -> None:

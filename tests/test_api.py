@@ -1,4 +1,5 @@
 """Tests for API."""
+
 import json
 from pathlib import Path
 
