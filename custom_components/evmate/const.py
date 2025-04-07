@@ -1,8 +1,9 @@
 """Constants for evmate."""
 
 from logging import Logger, getLogger
-from homeassistant.components.sensor import SensorEntityDescription
+
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
+from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.components.sensor.const import SensorDeviceClass
 
 LOGGER: Logger = getLogger(__package__)
