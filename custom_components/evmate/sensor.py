@@ -5,13 +5,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import StateType
 
-from .coordinator import EVMateDataUpdateCoordinator
-from .data import IntegrationEVMateConfigEntry
 from .const import SENSOR_TYPES
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.typing import StateType
+
+    from .coordinator import EVMateDataUpdateCoordinator
+    from .data import IntegrationEVMateConfigEntry
 
 
 async def async_setup_entry(
@@ -22,7 +25,8 @@ async def async_setup_entry(
     """Set up the sensor platform."""
     async_add_entities(
         EVMateSensor(
-            f"{entry.unique_id}-{entity_description.key.replace(",", "_").replace(" ", "_")}",
+            entry.unique_id + "-" +
+                entity_description.key.replace(",", "_").replace(" ", "_"),
             coordinator=entry.runtime_data.coordinator,
             entity_description=entity_description,
         )
@@ -65,15 +69,3 @@ class EVMateSensor(SensorEntity):
     def native_value(self) -> StateType:
         """Return the state of the device."""
         return self._coordinator.data.get(self.entity_description.key, None)
-
-    # @property
-    # def extra_state_attributes(self):
-    #     """Return entity specific state attributes."""
-    #     return {
-    #         ATTR_API_TODAY_HOURLY_PRICES: self._coordinator.data.get(
-    #             ATTR_API_TODAY_HOURLY_PRICES
-    #         ),
-    #         ATTR_API_TOMORROW_HOURLY_PRICES: self._coordinator.data.get(
-    #             ATTR_API_TOMORROW_HOURLY_PRICES
-    #         ),
-    #     }

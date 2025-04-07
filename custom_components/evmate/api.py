@@ -2,16 +2,13 @@
 
 from __future__ import annotations
 
-import socket
-from typing import Any
-
-import aiohttp
-import async_timeout
-
 import json
+from typing import TYPE_CHECKING, Any
 
-from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
 
 
 class IntegrationEvmateApiClientError(Exception):
@@ -53,13 +50,13 @@ class IntegrationEvmateApiClient:
         return result
 
 
-    async def _endpoint_request(self, endpoint) -> dict[str, Any]:
+    async def _endpoint_request(self, endpoint: str) -> dict[str, Any]:
         try:
             response = await self._session.get(self._host + endpoint)
             response.raise_for_status()
             payload = await response.text()
             raw_json = json.loads(payload)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             raw_json = { "error": e }
 
         return raw_json

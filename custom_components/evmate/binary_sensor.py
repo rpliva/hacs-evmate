@@ -4,16 +4,19 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from .const import BINARY_SENSOR_TYPES
-from .coordinator import EVMateDataUpdateCoordinator
-from .data import IntegrationEVMateConfigEntry
-
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
+
+from .const import BINARY_SENSOR_TYPES
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
+    from .coordinator import EVMateDataUpdateCoordinator
+    from .data import IntegrationEVMateConfigEntry
 
 
 async def async_setup_entry(
@@ -24,7 +27,8 @@ async def async_setup_entry(
     """Set up the binary_sensor platform."""
     async_add_entities(
         EVMateBinarySensor(
-            f"{entry.unique_id}-{entity_description.key.replace(",", "_").replace(" ", "_")}",
+            entry.unique_id + "-" +
+                entity_description.key.replace(",", "_").replace(" ", "_"),
             coordinator=entry.runtime_data.coordinator,
             entity_description=entity_description,
         )
@@ -33,12 +37,15 @@ async def async_setup_entry(
 
 
 class EVMateBinarySensor(BinarySensorEntity):
+    """EVMate Binary sensor class."""
+
     def __init__(
         self,
         unique_id: str,
         description: BinarySensorEntityDescription,
         coordinator: EVMateDataUpdateCoordinator,
-    ):
+    ) -> None:
+        """Initialize the Binary sensor class."""
         super().__init__()
         self.entity_description = description
         self._coordinator = coordinator

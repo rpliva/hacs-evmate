@@ -1,28 +1,29 @@
-import pytest
+"""Tests for Binary sensors."""
 import json
-
-from unittest.mock import AsyncMock
 from pathlib import Path
+from unittest.mock import AsyncMock
 
-from custom_components.evmate.coordinator import EVMateDataUpdateCoordinator
-from custom_components.evmate.binary_sensor import EVMateBinarySensor
+import pytest
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
+
+from custom_components.evmate.binary_sensor import EVMateBinarySensor
+from custom_components.evmate.coordinator import EVMateDataUpdateCoordinator
 
 
 @pytest.mark.asyncio
-async def test_automatic_update_sensor():
-    """Test the Binary sensor for automatic update with data from the update_setting.json fixture."""
+async def test_automatic_update_sensor() -> None:
+    """Test the automatic update with data from the update_setting.json fixture."""
     await _check_binary_sensor_value("Automatic update", "sw,AUTOMATIC UPDATE", "on")
 
 @pytest.mark.asyncio
-async def test_enable_charging_sensor():
-    """Test the Binary sensor for enable charging with data from the update_setting.json fixture."""
+async def test_enable_charging_sensor() -> None:
+    """Test the enable charging with data from the update_setting.json fixture."""
     await _check_binary_sensor_value("Enable charging", "sw,ENABLE CHARGING", "off")
 
 
-async def _check_binary_sensor_value(name: str, key: str, expected_state: str):
+async def _check_binary_sensor_value(name: str, key: str, expected_state: str) -> None:
     fixtures_path = Path(__file__).parent / "fixtures"
-    with open(fixtures_path / "update_setting.json") as file:
+    with Path.open(fixtures_path / "update_setting.json") as file:
         update_setting = json.load(file)
 
     # Mock the coordinator
@@ -40,12 +41,3 @@ async def _check_binary_sensor_value(name: str, key: str, expected_state: str):
 
     # Assert the state and attributes for the first delivery in the fixture
     assert sensor.state == expected_state
-    # assert sensor.extra_state_attributes == {
-    #     "full_description": "Wireless Mouse Set",
-    #     "tracking_number": "8217400125612976",
-    #     "date_expected": "tomorrow",
-    #     "event_date": "yesterday",
-    #     "event_location": "Harrisburg, PA, USA",
-    #     "status": "Delivery in transit.",
-    #     "carrier": "Fedex",
-    # }
