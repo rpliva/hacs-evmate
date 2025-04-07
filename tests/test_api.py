@@ -1,17 +1,22 @@
+"""Tests for API."""
+
 import json
+from pathlib import Path
+
 import pytest
 
 from custom_components.evmate.api import IntegrationEvmateApiClient
-from pathlib import Path
+
 
 @pytest.mark.asyncio
-async def test_parcel_get_data_update_setting(hass, aioclient_mock):
+async def test_get_data(hass, aioclient_mock) -> None:  # noqa: ANN001
+    """Test case for updating data."""
     fixtures_path = Path(__file__).parent / "fixtures"
-    with open(fixtures_path / "update_setting.json") as file:
+    with Path.open(fixtures_path / "update_setting.json") as file:
         update_setting = json.load(file)
-    with open(fixtures_path / "update_data.json") as file:
+    with Path.open(fixtures_path / "update_data.json") as file:
         update_data = json.load(file)
-    with open(fixtures_path / "update_evse.json") as file:
+    with Path.open(fixtures_path / "update_evse.json") as file:
         update_evse = json.load(file)
 
     aioclient_mock.get(
@@ -35,4 +40,4 @@ async def test_parcel_get_data_update_setting(hass, aioclient_mock):
 
     assert result["DHCP"] == "1"
     assert result["EV_STATE"] == [2]
-    assert result["E2tN"] == 10252
+    assert result["E2tN"] == 10252  # noqa: PLR2004

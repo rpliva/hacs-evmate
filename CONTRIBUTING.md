@@ -46,6 +46,8 @@ People *love* thorough bug reports. I'm not even kidding.
 
 Use [black](https://github.com/ambv/black) to make sure the code follows the style.
 
+`python -m ruff check .`
+
 ## Test your code modification
 
 This custom component is based on [evmate template](https://github.com/ludeeus/evmate).
