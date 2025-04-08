@@ -11,7 +11,6 @@ from datetime import timedelta
 from typing import TYPE_CHECKING
 
 from homeassistant.const import CONF_IP_ADDRESS, CONF_PORT, Platform
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration
 
 from .api import IntegrationEvmateApiClient
@@ -47,7 +46,7 @@ async def async_setup_entry(
         client=IntegrationEvmateApiClient(
             address=entry.data[CONF_IP_ADDRESS],
             port=entry.data[CONF_PORT],
-            session=async_get_clientsession(hass),
+            hass=hass,
         ),
         integration=async_get_loaded_integration(hass, entry.domain),
         coordinator=coordinator,
