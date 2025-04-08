@@ -27,9 +27,11 @@ async def async_setup_entry(
     """Set up the binary_sensor platform."""
     async_add_entities(
         EVMateBinarySensor(
-            # unique_id=(entry.unique_id + "-" + entity_description.key.replace(",", "_").replace(" ", "_")),  # noqa: E501, ERA001
+            entry.unique_id
+            + "-"
+            + entity_description.key.replace(",", "_").replace(" ", "_"),
             coordinator=entry.runtime_data.coordinator,
-            entity_description=entity_description,
+            description=entity_description,
         )
         for entity_description in BINARY_SENSOR_TYPES
     )
@@ -40,7 +42,7 @@ class EVMateBinarySensor(BinarySensorEntity):
 
     def __init__(
         self,
-        # unique_id: str,
+        unique_id: str,
         description: BinarySensorEntityDescription,
         coordinator: EVMateDataUpdateCoordinator,
     ) -> None:
@@ -49,7 +51,7 @@ class EVMateBinarySensor(BinarySensorEntity):
         self.entity_description = description
         self._coordinator = coordinator
         self._attr_name = description.name
-        # self._attr_unique_id = unique_id  # noqa: ERA001
+        self._attr_unique_id = unique_id
 
     @property
     def available(self) -> bool:
