@@ -6,7 +6,6 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_IP_ADDRESS, CONF_PORT
 from homeassistant.helpers import selector
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from slugify import slugify
 
 from .api import (
@@ -86,6 +85,6 @@ class EVMateFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         client = IntegrationEvmateApiClient(
             address=address,
             port=port,
-            session=async_create_clientsession(self.hass),
+            hass=self.hass,
         )
         await client.async_get_data()
