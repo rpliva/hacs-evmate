@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING, Any
 
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
+from .const import LOGGER
+
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
@@ -45,8 +47,11 @@ class IntegrationEvmateApiClient:
         """Get data from the API."""
         result = {}
         result.update(await self._endpoint_request("updateSetting"))
+        LOGGER.warning("updateSetting loaded")
         result.update(await self._endpoint_request("updateData"))
+        LOGGER.warning("updateData loaded")
         result.update(await self._endpoint_request("updateEvse"))
+        LOGGER.warning("updateEvse loaded")
         return result
 
     async def _endpoint_request(self, endpoint: str) -> dict[str, Any]:
@@ -57,5 +62,6 @@ class IntegrationEvmateApiClient:
             raw_json = json.loads(payload)
         except Exception as e:  # noqa: BLE001
             raw_json = {"error": e}
+            LOGGER.error(e, stack_info=True, exc_info=True)
 
         return raw_json
