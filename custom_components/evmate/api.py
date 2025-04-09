@@ -41,7 +41,7 @@ class IntegrationEvmateApiClient:
         """Sample API Client."""
         self._hass = hass
         self._session = async_get_clientsession(self._hass)
-        self._host = "http://" + address + ":" + str(port) + "/"
+        self._host = "http://" + address + ":" + str(int(port)) + "/"
 
     async def async_get_data(self) -> dict[str, Any]:
         """Get data from the API."""
