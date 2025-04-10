@@ -64,7 +64,7 @@ class EVMateSensor(SensorEntity):
             "sw_version": self._coordinator.data.get("txt,ACTUAL SW VERSION", None),
             "model": "IoTMeter",
             "manufacturer": "EVMate",
-            "serial_number": self._coordinator.data.get("ID", None)
+            "serial_number": self._coordinator.data.get("ID", None),
         }
 
     @property
