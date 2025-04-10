@@ -5,7 +5,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from homeassistant.components.sensor import (
-    Entity,
     SensorEntity,
     SensorEntityDescription,
 )
@@ -56,7 +55,7 @@ class EVMateSensor(SensorEntity):
         self._attr_unique_id = unique_id
 
     @property
-    def device_info(self) -> DeviceInfo:
+    def device_info(self) -> any:
         """Information about this entity/device."""
         return {
             "identifiers": {(DOMAIN, self._attr_unique_id)},
