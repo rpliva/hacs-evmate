@@ -20,7 +20,7 @@ SENSOR_TYPES: tuple[SensorEntityDescription, ...] = (
     ),
     SensorEntityDescription(
         key="U2",
-        name="Vlatage L2",
+        name="Voltage L2",
         native_unit_of_measurement="V",
         device_class=SensorDeviceClass.VOLTAGE,
     ),

@@ -38,7 +38,7 @@ class IntegrationEvmateApiClient:
         port: int,
         hass: HomeAssistant,
     ) -> None:
-        """Sample API Client."""
+        """EVMate API Client."""
         self._hass = hass
         self._session = async_get_clientsession(self._hass)
         self._host = "http://" + address + ":" + str(int(port)) + "/"
@@ -47,11 +47,8 @@ class IntegrationEvmateApiClient:
         """Get data from the API."""
         result = {}
         result.update(await self._endpoint_request("updateSetting"))
-        LOGGER.warning("updateSetting loaded")
         result.update(await self._endpoint_request("updateData"))
-        LOGGER.warning("updateData loaded")
         result.update(await self._endpoint_request("updateEvse"))
-        LOGGER.warning("updateEvse loaded")
         return result
 
     async def _endpoint_request(self, endpoint: str) -> dict[str, Any]:

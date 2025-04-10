@@ -28,7 +28,9 @@ class EVMateFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> config_entries.ConfigFlowResult:
         """Handle a flow initialized by the user."""
         _errors = {}
-        if user_input is not None:
+        if user_input is not None and len(user_input[CONF_IP_ADDRESS]) == 0:
+            _errors["base"] = "missing"
+        elif user_input is not None:
             try:
                 await self._test_user_input(
                     address=user_input[CONF_IP_ADDRESS],
@@ -60,9 +62,7 @@ class EVMateFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(
-                        CONF_IP_ADDRESS,
-                    ): selector.TextSelector(
+                    vol.Required(CONF_IP_ADDRESS, default=""): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT,
                         ),

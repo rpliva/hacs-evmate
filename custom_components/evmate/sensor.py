@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.components.sensor import (
+    Entity,
+    SensorEntity,
+    SensorEntityDescription,
+)
 
-from .const import SENSOR_TYPES
+from .const import DOMAIN, SENSOR_TYPES
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -48,8 +52,21 @@ class EVMateSensor(SensorEntity):
         super().__init__()
         self.entity_description = entity_description
         self._coordinator = coordinator
-        self._attr_name = entity_description.name
+        self._attr_name = "EVMate"  # entity_description.name
         self._attr_unique_id = unique_id
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Information about this entity/device."""
+        return {
+            "identifiers": {(DOMAIN, self._attr_unique_id)},
+            # If desired, the name for the device could be different to the entity
+            "name": self.name,
+            "sw_version": self._coordinator.data.get("txt,ACTUAL SW VERSION", None),
+            "model": "IoTMeter",
+            "manufacturer": "EVMate",
+            "serial_number": self._coordinator.data.get("ID", None)
+        }
 
     @property
     def available(self) -> bool:
