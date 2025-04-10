@@ -37,7 +37,7 @@ async def async_setup_entry(
         return
 
     device = EVMateDevice(coordinator=entry.runtime_data.coordinator)
-    async_add_entities(device)
+    async_add_entities([device])
 
     async_add_entities(
         EVMateSensor(
