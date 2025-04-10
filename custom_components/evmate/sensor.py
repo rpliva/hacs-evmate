@@ -13,7 +13,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
 )
 
-from .const import BINARY_SENSOR_TYPES, DOMAIN, SENSOR_TYPES
+from .const import BINARY_SENSOR_TYPES, DOMAIN, LOGGER, SENSOR_TYPES
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -30,6 +30,12 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up the sensor platform."""
+    await entry.runtime_data.coordinator._async_update_data()  # noqa: SLF001
+    serial_number = entry.runtime_data.coordinator.data.get("ID", None)
+    if serial_number is None:
+        LOGGER.error("Serial number of EVMate device is not available.")
+        return
+
     device = EVMateDevice(coordinator=entry.runtime_data.coordinator)
     async_add_entities(device)
 
@@ -77,6 +83,7 @@ class EVMateDevice(SensorEntity):
         )
         self._attr_name = "EVMate IoTMeter"
         self._attr_unique_id = DOMAIN + "_" + self.serial_number
+        self.device_prefix = self._attr_unique_id + "_"
 
     @property
     def device_info(self) -> any:
