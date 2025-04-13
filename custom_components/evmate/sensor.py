@@ -18,7 +18,6 @@ from .const import BINARY_SENSOR_TYPES, DOMAIN, LOGGER, SENSOR_TYPES
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity import EntityDescription
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
 
@@ -43,7 +42,7 @@ async def async_setup_entry(
 
     async_add_entities(
         EVMateSensor(
-            unique_id=get_unique_id(device, entity_description),
+            unique_id=get_unique_id(device, entity_description.name),
             coordinator=entry.runtime_data.coordinator,
             entity_description=entity_description,
             device=device,
@@ -53,7 +52,7 @@ async def async_setup_entry(
 
     async_add_entities(
         EVMateBinarySensor(
-            unique_id=get_unique_id(device, entity_description),
+            unique_id=get_unique_id(device, entity_description.name),
             coordinator=entry.runtime_data.coordinator,
             description=entity_description,
             device=device,
@@ -62,12 +61,9 @@ async def async_setup_entry(
     )
 
 
-def get_unique_id(device: EVMateDevice, entity_description: EntityDescription) -> str:
+def get_unique_id(device: EVMateDevice, name: str) -> str:
     """Prepare the unique ID."""
-    name_attr = getattr(entity_description, "name", None)
-    if name_attr:
-        return device.unique_id + "_" + format_name(entity_description.name)
-    return device.unique_id + "_" + format_name(entity_description)
+    return device.unique_id + "_" + format_name(name)
 
 
 def format_name(name: str) -> str:
