@@ -17,9 +17,9 @@ from .const import BINARY_SENSOR_TYPES, DOMAIN, LOGGER, SENSOR_TYPES
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity import EntityDescription
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
-    from homeassistant.helpers.entity import EntityDescription
 
     from .coordinator import EVMateDataUpdateCoordinator
     from .data import IntegrationEVMateConfigEntry

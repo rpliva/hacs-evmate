@@ -31,7 +31,7 @@ SENSOR_TYPES: tuple[SensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.VOLTAGE,
     ),
     """    SensorEntityDescription(
-        key="A3", 
+        key="A3",
         name="Current L1",
         native_unit_of_measurement="A",
         device_class=SensorDeviceClass.CURRENT,
