@@ -6,6 +6,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
+from homeassistant.components.sensor import SensorEntityDescription
 
 from custom_components.evmate.const import SENSOR_TYPES
 from custom_components.evmate.coordinator import EVMateDataUpdateCoordinator
@@ -13,7 +14,32 @@ from custom_components.evmate.sensor import (
     EVMateBinarySensor,
     EVMateDevice,
     EVMateSensor,
+    get_unique_id,
 )
+
+
+def test_get_unique_id_for_binary_sensor() -> None:
+    """Test valid generation of unique ID."""
+    mock_device = AsyncMock(spec=EVMateDevice)
+    mock_device.unique_id = "evmate_12345"
+
+    entity = BinarySensorEntityDescription(key="U1", name="Voltage L1")
+
+    unique_id = get_unique_id(mock_device, entity)
+
+    assert unique_id == "evmate_12345_voltage_l1"
+
+
+def test_get_unique_id_for_sensor() -> None:
+    """Test valid generation of unique ID."""
+    mock_device = AsyncMock(spec=EVMateDevice)
+    mock_device.unique_id = "evmate_12345"
+
+    entity = SensorEntityDescription(key="U1", name="Voltage L1")
+
+    unique_id = get_unique_id(mock_device, entity)
+
+    assert unique_id == "evmate_12345_voltage_l1"
 
 
 @pytest.mark.asyncio

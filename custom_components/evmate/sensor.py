@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
+    from homeassistant.helpers.entity import EntityDescription
 
     from .coordinator import EVMateDataUpdateCoordinator
     from .data import IntegrationEVMateConfigEntry
@@ -41,9 +42,7 @@ async def async_setup_entry(
 
     async_add_entities(
         EVMateSensor(
-            entry.unique_id
-            + "-"
-            + entity_description.key.replace(",", "_").replace(" ", "_"),
+            unique_id=get_unique_id(device, entity_description),
             coordinator=entry.runtime_data.coordinator,
             entity_description=entity_description,
             device=device,
@@ -53,15 +52,23 @@ async def async_setup_entry(
 
     async_add_entities(
         EVMateBinarySensor(
-            entry.unique_id
-            + "-"
-            + entity_description.key.replace(",", "_").replace(" ", "_"),
+            unique_id=get_unique_id(device, entity_description),
             coordinator=entry.runtime_data.coordinator,
             description=entity_description,
             device=device,
         )
         for entity_description in BINARY_SENSOR_TYPES
     )
+
+
+def get_unique_id(device: EVMateDevice, entity: EntityDescription) -> str:
+    """Prepare the unique ID."""
+    return device.unique_id + "_" + format_name(entity.name)
+
+
+def format_name(name: str) -> str:
+    """Reformat the name to the unique ID."""
+    return name.replace(" ", "_").replace(":", "").lower()
 
 
 class EVMateDevice(SensorEntity):
@@ -81,7 +88,7 @@ class EVMateDevice(SensorEntity):
         self.serial_number = self._coordinator.data.get(
             self.entity_description.key, None
         )
-        self._attr_name = "EVMate IoTMeter"
+        self._attr_name = self.entity_description.name
         self._attr_unique_id = DOMAIN + "_" + self.serial_number
         self.device_prefix = self._attr_unique_id + "_"
 
