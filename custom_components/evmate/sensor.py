@@ -12,6 +12,7 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorEntityDescription,
 )
+from homeassistant.helpers.entity import generate_entity_id
 
 from .const import BINARY_SENSOR_TYPES, DOMAIN, LOGGER, SENSOR_TYPES
 
@@ -90,6 +91,11 @@ class EVMateDevice(SensorEntity):
         )
         self._attr_name = self.entity_description.name
         self._attr_unique_id = DOMAIN + "_" + self.serial_number
+        self.entity_id = generate_entity_id(
+            entity_id_format="device.{}",
+            name=self._attr_unique_id + "_serial_number",
+            hass=coordinator.hass,
+        )
         self.device_prefix = self._attr_unique_id + "_"
 
     @property
@@ -143,6 +149,9 @@ class EVMateSensor(SensorEntity):
         self._coordinator = coordinator
         self._attr_name = entity_description.name
         self._attr_unique_id = unique_id
+        self.entity_id = generate_entity_id(
+            entity_id_format="sensor.{}", name=unique_id, hass=coordinator.hass
+        )
 
     @property
     def device_info(self):  # noqa: ANN201
@@ -187,6 +196,9 @@ class EVMateBinarySensor(BinarySensorEntity):
         self._coordinator = coordinator
         self._attr_name = description.name
         self._attr_unique_id = unique_id
+        self.entity_id = generate_entity_id(
+            entity_id_format="binary_sensor.{}", name=unique_id, hass=coordinator.hass
+        )
 
     @property
     def device_info(self):  # noqa: ANN201

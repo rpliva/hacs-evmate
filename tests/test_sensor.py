@@ -7,6 +7,7 @@ from unittest.mock import AsyncMock
 import pytest
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
 from homeassistant.components.sensor import SensorEntityDescription
+from homeassistant.core import HomeAssistant
 
 from custom_components.evmate.const import SENSOR_TYPES
 from custom_components.evmate.coordinator import EVMateDataUpdateCoordinator
@@ -43,30 +44,36 @@ def test_get_unique_id_for_sensor() -> None:
 
 
 @pytest.mark.asyncio
-async def test_voltage_l1_sensor() -> None:
+async def test_voltage_l1_sensor(hass: HomeAssistant) -> None:
     """Test the sensor for Voltage L1 with data from the update_setting.json fixture."""
-    await _check_sensor_value("U1", 235)
+    await _check_sensor_value(hass, "U1", 235)
 
 
 @pytest.mark.asyncio
-async def test_voltage_l2_sensor() -> None:
+async def test_voltage_l2_sensor(hass: HomeAssistant) -> None:
     """Test the sensor for Voltage L2 with data from the update_setting.json fixture."""
-    await _check_sensor_value("U2", 233)
+    await _check_sensor_value(hass, "U2", 233)
 
 
 @pytest.mark.asyncio
-async def test_automatic_update_sensor() -> None:
+async def test_automatic_update_sensor(hass: HomeAssistant) -> None:
     """Test the automatic update with data from the update_setting.json fixture."""
-    await _check_binary_sensor_value("Automatic update", "sw,AUTOMATIC UPDATE", "on")
+    await _check_binary_sensor_value(
+        hass, "Automatic update", "sw,AUTOMATIC UPDATE", "on"
+    )
 
 
 @pytest.mark.asyncio
-async def test_enable_charging_sensor() -> None:
+async def test_enable_charging_sensor(hass: HomeAssistant) -> None:
     """Test the enable charging with data from the update_setting.json fixture."""
-    await _check_binary_sensor_value("Enable charging", "sw,ENABLE CHARGING", "off")
+    await _check_binary_sensor_value(
+        hass, "Enable charging", "sw,ENABLE CHARGING", "off"
+    )
 
 
-async def _check_sensor_value(key: str, expected_state: str) -> None:
+async def _check_sensor_value(
+    hass: HomeAssistant, key: str, expected_state: str
+) -> None:
     fixtures_path = Path(__file__).parent / "fixtures"
     with Path.open(fixtures_path / "update_data.json") as file:
         update_data = json.load(file)
@@ -74,6 +81,7 @@ async def _check_sensor_value(key: str, expected_state: str) -> None:
     # Mocks
     mock_coordinator = AsyncMock(spec=EVMateDataUpdateCoordinator)
     mock_coordinator.data = update_data
+    mock_coordinator.hass = hass
     mock_device = AsyncMock(spec=EVMateDevice)
     mock_device._attr_unique_id = "evmate_12345"  # noqa: SLF001
 
@@ -90,7 +98,9 @@ async def _check_sensor_value(key: str, expected_state: str) -> None:
     assert sensor.state == expected_state
 
 
-async def _check_binary_sensor_value(name: str, key: str, expected_state: str) -> None:
+async def _check_binary_sensor_value(
+    hass: HomeAssistant, name: str, key: str, expected_state: str
+) -> None:
     fixtures_path = Path(__file__).parent / "fixtures"
     with Path.open(fixtures_path / "update_setting.json") as file:
         update_setting = json.load(file)
@@ -98,6 +108,7 @@ async def _check_binary_sensor_value(name: str, key: str, expected_state: str) -
     # Mocks
     mock_coordinator = AsyncMock(spec=EVMateDataUpdateCoordinator)
     mock_coordinator.data = update_setting
+    mock_coordinator.hass = hass
     mock_description = AsyncMock(spec=BinarySensorEntityDescription)
     mock_description.name = name
     mock_description.key = key
