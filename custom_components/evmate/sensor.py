@@ -42,7 +42,7 @@ async def async_setup_entry(
 
     async_add_entities(
         EVMateSensor(
-            unique_id=get_unique_id(device, entity_description.name),
+            unique_id=device.unique_id + "_" + format_name(entity_description.name),
             coordinator=entry.runtime_data.coordinator,
             entity_description=entity_description,
             device=device,
@@ -52,7 +52,7 @@ async def async_setup_entry(
 
     async_add_entities(
         EVMateBinarySensor(
-            unique_id=get_unique_id(device, entity_description.name),
+            unique_id=device.unique_id + "_" + format_name(entity_description.name),
             coordinator=entry.runtime_data.coordinator,
             description=entity_description,
             device=device,
