@@ -62,9 +62,12 @@ async def async_setup_entry(
     )
 
 
-def get_unique_id(device: EVMateDevice, entity: EntityDescription) -> str:
+def get_unique_id(device: EVMateDevice, entity_description: EntityDescription) -> str:
     """Prepare the unique ID."""
-    return device.unique_id + "_" + format_name(entity.name)
+    name_attr = getattr(entity_description, "name", None)
+    if name_attr:
+        return device.unique_id + "_" + format_name(entity_description.name)
+    return device.unique_id + "_" + format_name(entity_description)
 
 
 def format_name(name: str) -> str:
