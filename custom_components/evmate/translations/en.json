@@ -2,10 +2,10 @@
     "config": {
         "step": {
             "user": {
-                "description": "If you need help with the configuration have a look here: https://github.com/ludeeus/evmate",
+                "description": "If you need help with the configuration have a look here: https://github.com/rpliva/hacs-evmate",
                 "data": {
-                    "username": "Username",
-                    "password": "Password"
+                    "ip_address": "Device IP address",
+                    "port": "Port"
                 }
             }
         },

@@ -2,7 +2,7 @@
 Custom integration to integrate evmate with Home Assistant.
 
 For more details about this integration, please refer to
-https://github.com/ludeeus/evmate
+https://github.com/rpliva/evmate
 """
 
 from __future__ import annotations
@@ -11,7 +11,6 @@ from datetime import timedelta
 from typing import TYPE_CHECKING
 
 from homeassistant.const import CONF_IP_ADDRESS, CONF_PORT, Platform
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration
 
 from .api import IntegrationEvmateApiClient
@@ -26,8 +25,7 @@ if TYPE_CHECKING:
 
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
-    Platform.BINARY_SENSOR,
-    Platform.SWITCH,
+    # Platform.BINARY_SENSOR,
 ]
 
 
@@ -47,7 +45,7 @@ async def async_setup_entry(
         client=IntegrationEvmateApiClient(
             address=entry.data[CONF_IP_ADDRESS],
             port=entry.data[CONF_PORT],
-            session=async_get_clientsession(hass),
+            hass=hass,
         ),
         integration=async_get_loaded_integration(hass, entry.domain),
         coordinator=coordinator,

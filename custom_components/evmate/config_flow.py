@@ -6,7 +6,6 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_IP_ADDRESS, CONF_PORT
 from homeassistant.helpers import selector
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from slugify import slugify
 
 from .api import (
@@ -29,7 +28,9 @@ class EVMateFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> config_entries.ConfigFlowResult:
         """Handle a flow initialized by the user."""
         _errors = {}
-        if user_input is not None:
+        if user_input is not None and len(user_input[CONF_IP_ADDRESS]) == 0:
+            _errors["base"] = "missing"
+        elif user_input is not None:
             try:
                 await self._test_user_input(
                     address=user_input[CONF_IP_ADDRESS],
@@ -61,17 +62,18 @@ class EVMateFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(
-                        CONF_IP_ADDRESS,
-                    ): selector.TextSelector(
+                    vol.Required(CONF_IP_ADDRESS, default=""): selector.TextSelector(
                         selector.TextSelectorConfig(
                             type=selector.TextSelectorType.TEXT,
                         ),
                     ),
-                    vol.Required(CONF_PORT, default=8000): selector.TextSelector(
-                        selector.TextSelectorConfig(
-                            type=selector.TextSelectorType.NUMBER,
-                        ),
+                    vol.Required(CONF_PORT, default=8000): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            min=1,
+                            max=65535,
+                            step=1,
+                            mode=selector.NumberSelectorMode.BOX,
+                        )
                     ),
                 },
             ),
@@ -83,6 +85,6 @@ class EVMateFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         client = IntegrationEvmateApiClient(
             address=address,
             port=port,
-            session=async_create_clientsession(self.hass),
+            hass=self.hass,
         )
         await client.async_get_data()
