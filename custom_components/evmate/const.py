@@ -34,7 +34,7 @@ SENSOR_TYPES: tuple[SensorEntityDescription, ...] = (
         native_unit_of_measurement="V",
         device_class=SensorDeviceClass.VOLTAGE,
     ),
-    """    SensorEntityDescription(
+    SensorEntityDescription(
         key="A3",
         name="Current L1",
         native_unit_of_measurement="A",
@@ -84,7 +84,7 @@ SENSOR_TYPES: tuple[SensorEntityDescription, ...] = (
         key="R3",
         name="Power factor L3",
         device_class=SensorDeviceClass.POWER_FACTOR,
-    ),""",
+    ),
 )
 
 BINARY_SENSOR_TYPES: tuple[BinarySensorEntityDescription, ...] = (
@@ -96,7 +96,7 @@ BINARY_SENSOR_TYPES: tuple[BinarySensorEntityDescription, ...] = (
         key="sw,ENABLE CHARGING",
         name="Enable charging",
     ),
-    """    BinarySensorEntityDescription(
+    BinarySensorEntityDescription(
         key="sw,ENABLE BALANCING",
         name="Enable balancing",
     ),
@@ -131,5 +131,5 @@ BINARY_SENSOR_TYPES: tuple[BinarySensorEntityDescription, ...] = (
     BinarySensorEntityDescription(
         key="sw,P-E15-GUARD",
         name="P-E15 GUARD",
-    ),""",
+    ),
 )
