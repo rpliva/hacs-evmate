@@ -37,11 +37,13 @@ async def async_setup_entry(
         LOGGER.error("Serial number of EVMate device is not available.")
         return
 
-    device_prefix = DOMAIN + "_" + serial_number + "_"
+    device_id = DOMAIN + "_" + serial_number
+    device_prefix = device_id + "_"
 
     async_add_entities(
         EVMateSensor(
             unique_id=device_prefix + format_name(entity_description.name),
+            device_id=device_id,
             coordinator=entry.runtime_data.coordinator,
             entity_description=entity_description,
         )
@@ -51,6 +53,7 @@ async def async_setup_entry(
     async_add_entities(
         EVMateBinarySensor(
             unique_id=device_prefix + format_name(entity_description.name),
+            device_id=device_id,
             coordinator=entry.runtime_data.coordinator,
             description=entity_description,
         )
@@ -69,11 +72,13 @@ class EVMateSensor(SensorEntity):
     def __init__(
         self,
         unique_id: str,
+        device_id: str,
         entity_description: SensorEntityDescription,
         coordinator: EVMateDataUpdateCoordinator,
     ) -> None:
         """Initialize the sensor class."""
         super().__init__()
+        self.device_id = device_id
         self.entity_description = entity_description
         self._coordinator = coordinator
         self._attr_name = entity_description.name
@@ -91,7 +96,7 @@ class EVMateSensor(SensorEntity):
         """Return information to link this entity with the correct device."""
         if self.entity_description.key == "ID":
             return {
-                "identifiers": {(DOMAIN, self._attr_unique_id)},
+                "identifiers": {(DOMAIN, self.device_id)},
                 # If desired, the name for the device could be different to the entity
                 "name": self.name,
                 "sw_version": self._coordinator.data.get("txt,ACTUAL SW VERSION", None),
@@ -99,7 +104,7 @@ class EVMateSensor(SensorEntity):
                 "manufacturer": "EVMate",
                 "serial_number": self.serial_number,
             }
-        return {"identifiers": {(DOMAIN, self.device._attr_unique_id)}}  # noqa: SLF001
+        return {"identifiers": {(DOMAIN, self.device_id)}}
 
     @property
     def available(self) -> bool:
@@ -128,11 +133,13 @@ class EVMateBinarySensor(BinarySensorEntity):
     def __init__(
         self,
         unique_id: str,
+        device_id: str,
         description: BinarySensorEntityDescription,
         coordinator: EVMateDataUpdateCoordinator,
     ) -> None:
         """Initialize the Binary sensor class."""
         super().__init__()
+        self.device_id = device_id
         self.entity_description = description
         self._coordinator = coordinator
         self._attr_name = description.name
@@ -148,7 +155,7 @@ class EVMateBinarySensor(BinarySensorEntity):
     @property
     def device_info(self):  # noqa: ANN201
         """Return information to link this entity with the correct device."""
-        return {"identifiers": {(DOMAIN, self.device._attr_unique_id)}}  # noqa: SLF001
+        return {"identifiers": {(DOMAIN, self.device_id)}}
 
     @property
     def available(self) -> bool:

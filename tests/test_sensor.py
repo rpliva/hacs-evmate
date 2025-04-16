@@ -68,7 +68,7 @@ async def _check_sensor_value(
     description = next(t for t in SENSOR_TYPES if t.key == key)
 
     # Initialize the sensor
-    sensor = EVMateSensor("test", description, mock_coordinator)
+    sensor = EVMateSensor("test", "device", description, mock_coordinator)
 
     # Call async_update to fetch data
     await sensor.async_update()
@@ -93,7 +93,7 @@ async def _check_binary_sensor_value(
     mock_description.key = key
 
     # Initialize the RecentShipment sensor
-    sensor = EVMateBinarySensor("test", mock_description, mock_coordinator)
+    sensor = EVMateBinarySensor("test", "device", mock_description, mock_coordinator)
 
     # Call async_update to fetch data
     await sensor.async_update()
