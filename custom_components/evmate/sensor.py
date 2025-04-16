@@ -211,11 +211,7 @@ class EVMateBinarySensor(BinarySensorEntity):
         )
 
         LOGGER.warning(
-            "Added binary sensor "
-            + self._attr_unique_id
-            + " ("
-            + self.entity_id
-            + ")"
+            "Added binary sensor " + self._attr_unique_id + " (" + self.entity_id + ")"
         )
 
     @property
