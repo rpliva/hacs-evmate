@@ -12,30 +12,16 @@ from custom_components.evmate.const import SENSOR_TYPES
 from custom_components.evmate.coordinator import EVMateDataUpdateCoordinator
 from custom_components.evmate.sensor import (
     EVMateBinarySensor,
-    EVMateDevice,
     EVMateSensor,
-    get_unique_id,
+    format_name,
 )
-
-
-def test_get_unique_id_for_binary_sensor() -> None:
-    """Test valid generation of unique ID."""
-    mock_device = AsyncMock(spec=EVMateDevice)
-    mock_device.unique_id = "evmate_12345"
-
-    unique_id = get_unique_id(mock_device, "Voltage L1")
-
-    assert unique_id == "evmate_12345_voltage_l1"
 
 
 def test_get_unique_id_for_sensor() -> None:
     """Test valid generation of unique ID."""
-    mock_device = AsyncMock(spec=EVMateDevice)
-    mock_device.unique_id = "evmate_12345"
+    unique_id = format_name("Voltage L1")
 
-    unique_id = get_unique_id(mock_device, "Voltage L1")
-
-    assert unique_id == "evmate_12345_voltage_l1"
+    assert unique_id == "voltage_l1"
 
 
 @pytest.mark.asyncio
@@ -77,14 +63,12 @@ async def _check_sensor_value(
     mock_coordinator = AsyncMock(spec=EVMateDataUpdateCoordinator)
     mock_coordinator.data = update_data
     mock_coordinator.hass = hass
-    mock_device = AsyncMock(spec=EVMateDevice)
-    mock_device._attr_unique_id = "evmate_12345"  # noqa: SLF001
 
     # Find the right EntityDescription
     description = next(t for t in SENSOR_TYPES if t.key == key)
 
     # Initialize the sensor
-    sensor = EVMateSensor("test", description, mock_coordinator, mock_device)
+    sensor = EVMateSensor("test", description, mock_coordinator)
 
     # Call async_update to fetch data
     await sensor.async_update()
@@ -107,11 +91,9 @@ async def _check_binary_sensor_value(
     mock_description = AsyncMock(spec=BinarySensorEntityDescription)
     mock_description.name = name
     mock_description.key = key
-    mock_device = AsyncMock(spec=EVMateDevice)
-    mock_device._attr_unique_id = "evmate_12345"  # noqa: SLF001
 
     # Initialize the RecentShipment sensor
-    sensor = EVMateBinarySensor("test", mock_description, mock_coordinator, mock_device)
+    sensor = EVMateBinarySensor("test", mock_description, mock_coordinator)
 
     # Call async_update to fetch data
     await sensor.async_update()

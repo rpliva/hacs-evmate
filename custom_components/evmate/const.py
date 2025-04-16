@@ -13,6 +13,10 @@ DOMAIN = "evmate"
 
 SENSOR_TYPES: tuple[SensorEntityDescription, ...] = (
     SensorEntityDescription(
+        key="ID",
+        name="Serial number",
+    ),
+    SensorEntityDescription(
         key="U1",
         name="Voltage L1",
         native_unit_of_measurement="V",
