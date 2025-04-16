@@ -37,7 +37,9 @@ async def async_setup_entry(
         LOGGER.error("Serial number of EVMate device is not available.")
         return
 
-    device = EVMateDevice(coordinator=entry.runtime_data.coordinator)
+    device = EVMateDevice(
+        DOMAIN + "_" + serial_number, coordinator=entry.runtime_data.coordinator
+    )
     async_add_entities([device])
 
     async_add_entities(
@@ -76,6 +78,7 @@ class EVMateDevice(SensorEntity):
 
     def __init__(
         self,
+        unique_id: str,
         coordinator: EVMateDataUpdateCoordinator,
     ) -> None:
         """Initialize the sensor class."""
@@ -89,13 +92,17 @@ class EVMateDevice(SensorEntity):
             self.entity_description.key, None
         )
         self._attr_name = self.entity_description.name
-        self._attr_unique_id = DOMAIN + "_" + self.serial_number
+        self._attr_unique_id = unique_id
         self.entity_id = generate_entity_id(
             entity_id_format="device.{}",
-            name=self._attr_unique_id + "_serial_number",
+            name=unique_id + "_serial_number",
             hass=coordinator.hass,
         )
-        self.device_prefix = self._attr_unique_id + "_"
+        self.device_prefix = unique_id + "_"
+
+        LOGGER.warning(
+            "Added device " + self._attr_unique_id + " (" + self.entity_id + ")"
+        )
 
     @property
     def device_info(self) -> any:
@@ -152,6 +159,10 @@ class EVMateSensor(SensorEntity):
             entity_id_format="sensor.{}", name=unique_id, hass=coordinator.hass
         )
 
+        LOGGER.warning(
+            "Added sensor " + self._attr_unique_id + " (" + self.entity_id + ")"
+        )
+
     @property
     def device_info(self):  # noqa: ANN201
         """Return information to link this entity with the correct device."""
@@ -197,6 +208,14 @@ class EVMateBinarySensor(BinarySensorEntity):
         self._attr_unique_id = unique_id
         self.entity_id = generate_entity_id(
             entity_id_format="binary_sensor.{}", name=unique_id, hass=coordinator.hass
+        )
+
+        LOGGER.warning(
+            "Added binary sensor "
+            + self._attr_unique_id
+            + " ("
+            + self.entity_id
+            + ")"
         )
 
     @property
