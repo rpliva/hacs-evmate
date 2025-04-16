@@ -101,11 +101,11 @@ class EVMateSensor(SensorEntity):
             return {
                 "identifiers": {(DOMAIN, self.device_id)},
                 # If desired, the name for the device could be different to the entity
-                "name": self.name,
+                "name": "EVMate IoTMeter - " + self._coordinator.data.get("ID", None),
                 "sw_version": self._coordinator.data.get("txt,ACTUAL SW VERSION", None),
                 "model": "IoTMeter",
                 "manufacturer": "EVMate",
-                "serial_number": self.serial_number,
+                "serial_number": self._coordinator.data.get("ID", None),
             }
         return {"identifiers": {(DOMAIN, self.device_id)}}
 
