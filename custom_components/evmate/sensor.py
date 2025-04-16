@@ -43,7 +43,7 @@ async def async_setup_entry(
     for entity_description in SENSOR_TYPES:
         LOGGER.warning(entity_description)
 
-    await async_add_entities(
+    async_add_entities(
         EVMateSensor(
             unique_id=device_prefix + format_name(entity_description.name),
             device_id=device_id,
@@ -53,7 +53,7 @@ async def async_setup_entry(
         for entity_description in SENSOR_TYPES
     )
 
-    await async_add_entities(
+    async_add_entities(
         EVMateBinarySensor(
             unique_id=device_prefix + format_name(entity_description.name),
             device_id=device_id,
