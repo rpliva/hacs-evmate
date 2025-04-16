@@ -32,15 +32,18 @@ async def async_setup_entry(
 ) -> None:
     """Set up the sensor platform."""
     await entry.runtime_data.coordinator._async_update_data()  # noqa: SLF001
-    serial_number = entry.runtime_data.coordinator.data.get("ID", None)
-    if serial_number is None:
+    serial_number: str | None = entry.runtime_data.coordinator.data.get("ID", None)
+    if not serial_number:
         LOGGER.error("Serial number of EVMate device is not available.")
         return
 
-    device_id = DOMAIN + "_" + serial_number
-    device_prefix = device_id + "_"
+    device_id: str = DOMAIN + "_" + serial_number
+    device_prefix: str = device_id + "_"
 
-    async_add_entities(
+    for entity_description in SENSOR_TYPES:
+        LOGGER.warning(entity_description)
+
+    await async_add_entities(
         EVMateSensor(
             unique_id=device_prefix + format_name(entity_description.name),
             device_id=device_id,
@@ -50,7 +53,7 @@ async def async_setup_entry(
         for entity_description in SENSOR_TYPES
     )
 
-    async_add_entities(
+    await async_add_entities(
         EVMateBinarySensor(
             unique_id=device_prefix + format_name(entity_description.name),
             device_id=device_id,
