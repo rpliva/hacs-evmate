@@ -10,6 +10,8 @@ from homeassistant.config_entries import ConfigEntry
 if TYPE_CHECKING:
     from homeassistant.loader import Integration
 
+    from custom_components.evmate.evmate import EVMate
+
     from .api import IntegrationEvmateApiClient
     from .coordinator import EVMateDataUpdateCoordinator
 
@@ -23,3 +25,4 @@ class IntegrationEVMateData:
     client: IntegrationEvmateApiClient
     coordinator: EVMateDataUpdateCoordinator
     integration: Integration
+    device: EVMate

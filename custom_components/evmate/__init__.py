@@ -13,6 +13,8 @@ from typing import TYPE_CHECKING
 from homeassistant.const import CONF_IP_ADDRESS, CONF_PORT, Platform
 from homeassistant.loader import async_get_loaded_integration
 
+from custom_components.evmate.evmate import EVMate
+
 from .api import IntegrationEvmateApiClient
 from .const import DOMAIN, LOGGER
 from .coordinator import EVMateDataUpdateCoordinator
@@ -25,7 +27,7 @@ if TYPE_CHECKING:
 
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
-    # Platform.BINARY_SENSOR,
+    Platform.BINARY_SENSOR,
 ]
 
 
@@ -41,14 +43,20 @@ async def async_setup_entry(
         name=DOMAIN,
         update_interval=timedelta(hours=1),
     )
+    client = IntegrationEvmateApiClient(
+        address=entry.data[CONF_IP_ADDRESS],
+        port=entry.data[CONF_PORT],
+        hass=hass,
+    )
+
+    data = await client.async_get_data()
+    device = EVMate(data, coordinator)
+
     entry.runtime_data = IntegrationEVMateData(
-        client=IntegrationEvmateApiClient(
-            address=entry.data[CONF_IP_ADDRESS],
-            port=entry.data[CONF_PORT],
-            hass=hass,
-        ),
+        client=client,
         integration=async_get_loaded_integration(hass, entry.domain),
         coordinator=coordinator,
+        device=device,
     )
 
     # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities

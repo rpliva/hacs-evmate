@@ -4,18 +4,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from homeassistant.components.sensor import (
-    SensorEntity,
-    SensorEntityDescription,
+from homeassistant.components.binary_sensor import (
+    BinarySensorEntity,
+    BinarySensorEntityDescription,
 )
 from homeassistant.helpers.entity import generate_entity_id
 
-from .const import LOGGER, SENSOR_TYPES
+from .const import BINARY_SENSOR_TYPES, LOGGER
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
-    from homeassistant.helpers.typing import StateType
 
     from custom_components.evmate.evmate import EVMate
 
@@ -30,25 +29,25 @@ async def async_setup_entry(
 ) -> None:
     """Set up the sensor platform."""
     async_add_entities(
-        EVMateSensor(
+        EVMateBinarySensor(
             device=entry.runtime_data.device,
             coordinator=entry.runtime_data.coordinator,
             entity_description=entity_description,
         )
-        for entity_description in SENSOR_TYPES
+        for entity_description in BINARY_SENSOR_TYPES
     )
 
 
-class EVMateSensor(SensorEntity):
-    """evmate Sensor class."""
+class EVMateBinarySensor(BinarySensorEntity):
+    """EVMate Binary sensor class."""
 
     def __init__(
         self,
         device: EVMate,
-        entity_description: SensorEntityDescription,
+        entity_description: BinarySensorEntityDescription,
         coordinator: EVMateDataUpdateCoordinator,
     ) -> None:
-        """Initialize the sensor class."""
+        """Initialize the Binary sensor class."""
         super().__init__()
         unique_id = device.get_unique_id(entity_description.name)
         self.device = device
@@ -57,11 +56,11 @@ class EVMateSensor(SensorEntity):
         self._attr_name = entity_description.name
         self._attr_unique_id = unique_id
         self.entity_id = generate_entity_id(
-            entity_id_format="sensor.{}", name=unique_id, hass=coordinator.hass
+            entity_id_format="binary_sensor.{}", name=unique_id, hass=coordinator.hass
         )
 
         LOGGER.warning(
-            "Added sensor " + self._attr_unique_id + " (" + self.entity_id + ")"
+            "Added binary sensor " + self._attr_unique_id + " (" + self.entity_id + ")"
         )
 
     @property
@@ -85,6 +84,6 @@ class EVMateSensor(SensorEntity):
         await self._coordinator.async_request_refresh()
 
     @property
-    def native_value(self) -> StateType:
-        """Return the state of the device."""
-        return self._coordinator.data.get(self.entity_description.key, None)
+    def is_on(self) -> bool:
+        """Return the state of the binary sensor."""
+        return self._coordinator.data.get(self.entity_description.key, "0") == "1"
