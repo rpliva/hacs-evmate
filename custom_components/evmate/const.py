@@ -3,87 +3,94 @@
 from logging import Logger, getLogger
 
 from homeassistant.components.binary_sensor import BinarySensorEntityDescription
-from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.components.sensor.const import SensorDeviceClass
+
+from custom_components.evmate.data import BaseSensorEntityDescription
 
 LOGGER: Logger = getLogger(__package__)
 
 DOMAIN = "evmate"
 
 
-SENSOR_TYPES: tuple[SensorEntityDescription, ...] = (
-    SensorEntityDescription(
+SENSOR_TYPES: tuple[BaseSensorEntityDescription, ...] = (
+    BaseSensorEntityDescription(
         key="ID",
         name="Serial number",
     ),
-    SensorEntityDescription(
+    BaseSensorEntityDescription(
         key="U1",
         name="Voltage L1",
         native_unit_of_measurement="V",
         device_class=SensorDeviceClass.VOLTAGE,
     ),
-    SensorEntityDescription(
+    BaseSensorEntityDescription(
         key="U2",
         name="Voltage L2",
         native_unit_of_measurement="V",
         device_class=SensorDeviceClass.VOLTAGE,
     ),
-    SensorEntityDescription(
+    BaseSensorEntityDescription(
         key="U3",
         name="Voltage L3",
         native_unit_of_measurement="V",
         device_class=SensorDeviceClass.VOLTAGE,
     ),
-    SensorEntityDescription(
+    BaseSensorEntityDescription(
         key="I1",
         name="Current L1",
-        native_unit_of_measurement="A",
+        native_unit_of_measurement="mA",
         device_class=SensorDeviceClass.CURRENT,
+        factor=10,
     ),
-    SensorEntityDescription(
+    BaseSensorEntityDescription(
         key="I2",
         name="Current L2",
-        native_unit_of_measurement="A",
+        native_unit_of_measurement="mA",
         device_class=SensorDeviceClass.CURRENT,
+        factor=10,
     ),
-    SensorEntityDescription(
+    BaseSensorEntityDescription(
         key="I3",
         name="Current L3",
-        native_unit_of_measurement="A",
+        native_unit_of_measurement="mA",
         device_class=SensorDeviceClass.CURRENT,
+        factor=10,
     ),
-    SensorEntityDescription(
+    BaseSensorEntityDescription(
         key="P1",
         name="Power L1",
-        native_unit_of_measurement="kW",
+        native_unit_of_measurement="W",
         device_class=SensorDeviceClass.POWER,
     ),
-    SensorEntityDescription(
+    BaseSensorEntityDescription(
         key="P2",
         name="Power L2",
-        native_unit_of_measurement="kW",
+        native_unit_of_measurement="W",
         device_class=SensorDeviceClass.POWER,
     ),
-    SensorEntityDescription(
+    BaseSensorEntityDescription(
         key="P3",
         name="Power L3",
-        native_unit_of_measurement="kW",
+        native_unit_of_measurement="W",
         device_class=SensorDeviceClass.POWER,
     ),
-    SensorEntityDescription(
-        key="R1",
+    BaseSensorEntityDescription(
+        key="F1",
         name="Power factor L1",
         device_class=SensorDeviceClass.POWER_FACTOR,
+        factor=0.01,
     ),
-    SensorEntityDescription(
-        key="R2",
+    BaseSensorEntityDescription(
+        key="F2",
         name="Power factor L2",
         device_class=SensorDeviceClass.POWER_FACTOR,
+        factor=0.01,
     ),
-    SensorEntityDescription(
-        key="R3",
+    BaseSensorEntityDescription(
+        key="F3",
         name="Power factor L3",
         device_class=SensorDeviceClass.POWER_FACTOR,
+        factor=0.01,
     ),
 )
 
@@ -131,5 +138,9 @@ BINARY_SENSOR_TYPES: tuple[BinarySensorEntityDescription, ...] = (
     BinarySensorEntityDescription(
         key="sw,P-E15-GUARD",
         name="P-E15 GUARD",
+    ),
+    BinarySensorEntityDescription(
+        key="RELAY",
+        name="RELAY",
     ),
 )

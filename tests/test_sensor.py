@@ -23,8 +23,8 @@ async def test_voltage_l1_sensor(hass: HomeAssistant) -> None:
 
 @pytest.mark.asyncio
 async def test_voltage_l2_sensor(hass: HomeAssistant) -> None:
-    """Test the sensor for Voltage L2 with data from the update_setting.json fixture."""
-    await _check_sensor_value(hass, "U2", 233)
+    """Test the sensor for Current L2 with data from the update_setting.json fixture."""
+    await _check_sensor_value(hass, "I2", 640)
 
 
 async def _check_sensor_value(

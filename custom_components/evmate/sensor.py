@@ -87,4 +87,10 @@ class EVMateSensor(SensorEntity):
     @property
     def native_value(self) -> StateType:
         """Return the state of the device."""
+        if self.entity_description.factor:
+            return (
+                self._coordinator.data.get(self.entity_description.key, None)
+                * self.entity_description.factor
+            )
+
         return self._coordinator.data.get(self.entity_description.key, None)

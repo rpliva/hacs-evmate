@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.config_entries import ConfigEntry
 
 if TYPE_CHECKING:
@@ -26,3 +27,9 @@ class IntegrationEVMateData:
     coordinator: EVMateDataUpdateCoordinator
     integration: Integration
     device: EVMate
+
+
+class BaseSensorEntityDescription(SensorEntityDescription, frozen_or_thawed=True):
+    """Base class for EVMate sensors."""
+
+    factor: float | None = None
