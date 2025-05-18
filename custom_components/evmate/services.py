@@ -34,14 +34,12 @@ async def async_register_services(
 
     async def async_set_current(call: ServiceCall) -> None:
         """Set current value for the specific EVSE device."""
-        _LOGGER.info("SET_CURRENT service - Received data", call.data)  # noqa: PLE1205
         evse_id = call.data[EVSE_ID]
         current = call.data[CURRENT]
         request = (
             '{"variable":"inp,EVSE' + str(evse_id) + '","value":"' + str(current) + '"}'
         )
-        _LOGGER.info("SET_CURRENT service - requsting change - ", request)  # noqa: PLE1205
-        client.async_post_setting(str.encode(request))
+        await client.async_post_setting(str.encode(request))
 
     hass.services.async_register(
         DOMAIN,
