@@ -2,7 +2,7 @@
 Custom integration to integrate evmate with Home Assistant.
 
 For more details about this integration, please refer to
-https://github.com/ludeeus/evmate
+https://github.com/rpliva/evmate
 """
 
 from __future__ import annotations
@@ -11,13 +11,15 @@ from datetime import timedelta
 from typing import TYPE_CHECKING
 
 from homeassistant.const import CONF_IP_ADDRESS, CONF_PORT, Platform
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration
+
+from custom_components.evmate.evmate import EVMate
 
 from .api import IntegrationEvmateApiClient
 from .const import DOMAIN, LOGGER
 from .coordinator import EVMateDataUpdateCoordinator
 from .data import IntegrationEVMateData
+from .services import async_register_services
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -27,7 +29,6 @@ if TYPE_CHECKING:
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
     Platform.BINARY_SENSOR,
-    Platform.SWITCH,
 ]
 
 
@@ -43,14 +44,20 @@ async def async_setup_entry(
         name=DOMAIN,
         update_interval=timedelta(hours=1),
     )
+    client = IntegrationEvmateApiClient(
+        address=entry.data[CONF_IP_ADDRESS],
+        port=entry.data[CONF_PORT],
+        hass=hass,
+    )
+
+    data = await client.async_get_data()
+    device = EVMate(data, coordinator)
+
     entry.runtime_data = IntegrationEVMateData(
-        client=IntegrationEvmateApiClient(
-            address=entry.data[CONF_IP_ADDRESS],
-            port=entry.data[CONF_PORT],
-            session=async_get_clientsession(hass),
-        ),
+        client=client,
         integration=async_get_loaded_integration(hass, entry.domain),
         coordinator=coordinator,
+        device=device,
     )
 
     # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
@@ -58,6 +65,8 @@ async def async_setup_entry(
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+
+    await async_register_services(hass, client)
 
     return True
 
