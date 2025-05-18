@@ -45,7 +45,7 @@ async def async_register_services(
 
     hass.services.async_register(
         DOMAIN,
-        "set_current",
+        "evmate_set_current",
         async_set_current,
         schema=SET_CURRENT_SCHEMA,
     )

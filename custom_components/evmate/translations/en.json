@@ -19,7 +19,7 @@
         }
     },
     "services": {
-        "set_current": {
+        "evmate_set_current": {
             "name": "Set the current",
             "description": "Set the current value for the specific ESVE",
             "fields": {
