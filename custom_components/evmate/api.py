@@ -13,6 +13,11 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
 
+UPDATE_SETTING = "updateSetting"
+UPDATE_DATA = "updateData"
+UPDATE_EVSE = "updateEvse"
+
+
 class IntegrationEvmateApiClientError(Exception):
     """Exception to indicate a general API error."""
 
@@ -46,12 +51,25 @@ class IntegrationEvmateApiClient:
     async def async_get_data(self) -> dict[str, Any]:
         """Get data from the API."""
         result = {}
-        result.update(await self._endpoint_request("updateSetting"))
-        result.update(await self._endpoint_request("updateData"))
-        result.update(await self._endpoint_request("updateEvse"))
+        result.update(await self._endpoint_get_request(UPDATE_SETTING))
+        result.update(await self._endpoint_get_request(UPDATE_DATA))
+        result.update(await self._endpoint_get_request(UPDATE_EVSE))
         return result
 
-    async def _endpoint_request(self, endpoint: str) -> dict[str, Any]:
+    async def async_post_setting(self, data: bytes) -> bool:
+        """Set device setting via API."""
+        try:
+            response = await self._session.post(self._host + UPDATE_SETTING, data=data)
+            response.raise_for_status()
+            payload = await response.text()
+            raw_json = json.loads(payload)
+        except Exception as e:  # noqa: BLE001
+            raw_json = {"error": e}
+            LOGGER.error(e, stack_info=True, exc_info=True)
+
+        return raw_json["process"]
+
+    async def _endpoint_get_request(self, endpoint: str) -> dict[str, Any]:
         try:
             response = await self._session.get(self._host + endpoint)
             response.raise_for_status()

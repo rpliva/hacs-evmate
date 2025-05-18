@@ -11,6 +11,8 @@ LOGGER: Logger = getLogger(__package__)
 
 DOMAIN = "evmate"
 
+EVSE_ID = "evse_id"
+CURRENT = "current"
 
 SENSOR_TYPES: tuple[BaseSensorEntityDescription, ...] = (
     BaseSensorEntityDescription(

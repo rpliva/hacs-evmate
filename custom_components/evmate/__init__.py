@@ -19,6 +19,7 @@ from .api import IntegrationEvmateApiClient
 from .const import DOMAIN, LOGGER
 from .coordinator import EVMateDataUpdateCoordinator
 from .data import IntegrationEVMateData
+from .services import async_register_services
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -64,6 +65,8 @@ async def async_setup_entry(
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+
+    await async_register_services(hass, client)
 
     return True
 
