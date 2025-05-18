@@ -17,5 +17,22 @@
         "abort": {
             "already_configured": "This entry is already configured."
         }
+    },
+        "services": {
+            "set_current": {
+                "name": "Set the current",
+                "description": "Set the current value for the specific ESVE",
+                "fields": {
+                    "evse_id": {
+                        "name": "EVSE ID",
+                        "description": "The EVSE id"
+                    },
+                    "current": {
+                        "name": "The current",
+                        "description": "The current value that will be set"
+                    }
+                }
+            }
+        }
     }
 }
