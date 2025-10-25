@@ -154,7 +154,6 @@ SENSOR_TYPES: tuple[BaseSensorEntityDescription, ...] = (
         native_unit_of_measurement="A",
         device_class=SensorDeviceClass.CURRENT,
     ),
-
 )
 
 BINARY_SENSOR_TYPES: tuple[BinarySensorEntityDescription, ...] = (
