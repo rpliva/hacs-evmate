@@ -94,6 +94,67 @@ SENSOR_TYPES: tuple[BaseSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.POWER_FACTOR,
         factor=0.01,
     ),
+    BaseSensorEntityDescription(
+        key="inp,EVSE1",
+        name="EVSE1 - Charging current",
+        native_unit_of_measurement="A",
+        device_class=SensorDeviceClass.CURRENT,
+    ),
+    BaseSensorEntityDescription(
+        key="inp,EVSE2",
+        name="EVSE2 - Charging current",
+        native_unit_of_measurement="A",
+        device_class=SensorDeviceClass.CURRENT,
+    ),
+    BaseSensorEntityDescription(
+        key="inp,EVSE3",
+        name="EVSE3 - Charging current",
+        native_unit_of_measurement="A",
+        device_class=SensorDeviceClass.CURRENT,
+    ),
+    BaseSensorEntityDescription(
+        key="inp,EVSE4",
+        name="EVSE4 - Charging current",
+        native_unit_of_measurement="A",
+        device_class=SensorDeviceClass.CURRENT,
+    ),
+    BaseSensorEntityDescription(
+        key="inp,EVSE5",
+        name="EVSE5 - Charging current",
+        native_unit_of_measurement="A",
+        device_class=SensorDeviceClass.CURRENT,
+    ),
+    BaseSensorEntityDescription(
+        key="inp,EVSE6",
+        name="EVSE6 - Charging current",
+        native_unit_of_measurement="A",
+        device_class=SensorDeviceClass.CURRENT,
+    ),
+    BaseSensorEntityDescription(
+        key="inp,EVSE7",
+        name="EVSE7 - Charging current",
+        native_unit_of_measurement="A",
+        device_class=SensorDeviceClass.CURRENT,
+    ),
+    BaseSensorEntityDescription(
+        key="inp,EVSE8",
+        name="EVSE8 - Charging current",
+        native_unit_of_measurement="A",
+        device_class=SensorDeviceClass.CURRENT,
+    ),
+    BaseSensorEntityDescription(
+        key="inp,EVSE9",
+        name="EVSE9 - Charging current",
+        native_unit_of_measurement="A",
+        device_class=SensorDeviceClass.CURRENT,
+    ),
+    BaseSensorEntityDescription(
+        key="inp,EVSE10",
+        name="EVSE10 - Charging current",
+        native_unit_of_measurement="A",
+        device_class=SensorDeviceClass.CURRENT,
+    ),
+
 )
 
 BINARY_SENSOR_TYPES: tuple[BinarySensorEntityDescription, ...] = (
