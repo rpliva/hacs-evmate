@@ -2,10 +2,10 @@
     "config": {
         "step": {
             "user": {
-                "description": "If you need help with the configuration have a look here: https://github.com/ludeeus/evmate",
+                "description": "If you need help with the configuration have a look here: https://github.com/rpliva/hacs-evmate",
                 "data": {
-                    "username": "Username",
-                    "password": "Password"
+                    "ip_address": "Device IP address",
+                    "port": "Port"
                 }
             }
         },
@@ -16,6 +16,22 @@
         },
         "abort": {
             "already_configured": "This entry is already configured."
+        }
+    },
+    "services": {
+        "evmate_set_current": {
+            "name": "Set the current",
+            "description": "Set the current value for the specific ESVE",
+            "fields": {
+                "evse_id": {
+                    "name": "EVSE ID",
+                    "description": "The EVSE id"
+                },
+                "current": {
+                    "name": "The current",
+                    "description": "The current value that will be set"
+                }
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
-[![Python package](https://github.com/rpliva/hacs-evmate/actions/workflows/pythonpackage.yaml/badge.svg?branch=main)](https://github.com/rpliva/hacs-evmate/actions/workflows/pythonpackage.yaml)
-[![Validate with hassfest](https://github.com/rpliva/hacs-evmate/actions/workflows/hassfest.yaml/badge.svg?branch=main)](https://github.com/rpliva/hacs-evmate/actions/workflows/hassfest.yaml)
-[![HACS Action](https://github.com/rpliva/hacs-evmate/actions/workflows/validate.yaml/badge.svg?branch=main)](https://github.com/rpliva/hacs-evmate/actions/workflows/validate.yaml)
+[![License](https://img.shields.io/github/license/rpliva/hacs-evmate)](https://github.com/rpliva/hacs-evmate/blob/main/LICENSE)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/rpliva/hacs-evmate/total)](https://github.com/rpliva/hacs-evmate/releases)
+[![GitHub Activity](https://img.shields.io/github/commit-activity/y/rpliva/hacs-evmate?label=commits)](https://github.com/rpliva/hacs-evmate/commits/main)
+[![HACS Supported](https://img.shields.io/badge/HACS-Supported-03a9f4)](https://github.com/custom-components/hacs)
+[![Validate](https://github.com/rpliva/hacs-evmate/actions/workflows/validate.yml/badge.svg)](https://github.com/rpliva/hacs-evmate/actions/workflows/validate.yml)
 [![Latest Commit](https://badgen.net/github/last-commit/rpliva/hacs-evmate/main)](https://github.com/rpliva/hacs-evmate/commit/HEAD)
 
 EVMate IoTMeter Integration for Home Assistant

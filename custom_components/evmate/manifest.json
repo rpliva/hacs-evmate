@@ -5,8 +5,8 @@
     "@rpliva"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/rpliva/evmate",
+  "documentation": "https://github.com/rpliva/hacs-evmate",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/rpliva/evmate/issues",
+  "issue_tracker": "https://github.com/rpliva/hacs-evmate/issues",
   "version": "0.1.0"
 }
